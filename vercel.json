@@ -1,0 +1,32 @@
+{
+  "build": {
+    "env": {
+      "VITE_APP_URL": "https://ecohunt-farcaster.vercel.app",
+      "VITE_FARCASTER_APP_ID": "ecohunt-miniapp",
+      "VITE_NETWORK_NAME": "zora",
+      "VITE_CHAIN_ID": "7777777",
+      "VITE_IS_TESTNET": "false"
+    }
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "X-Content-Type-Options", 
+          "value": "nosniff"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
