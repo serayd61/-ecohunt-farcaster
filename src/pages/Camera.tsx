@@ -1,12 +1,16 @@
 import { useState, useRef } from 'react'
-import { Camera as CameraIcon, Upload, Check, X, Share2 } from 'lucide-react'
+import { Camera as CameraIcon, Upload, Check, X, Share2, ExternalLink } from 'lucide-react'
 import { farcasterSDK } from '../utils/farcaster'
+import { blockchainService } from '../utils/blockchain'
 
 export function Camera() {
   const [isCapturing, setIsCapturing] = useState(false)
   const [capturedImage, setCapturedImage] = useState<string | null>(null)
   const [selectedActivity, setSelectedActivity] = useState('')
   const [isValidating, setIsValidating] = useState(false)
+  const [validationResult, setValidationResult] = useState<any>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [txHash, setTxHash] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const activities = [
@@ -33,18 +37,51 @@ export function Camera() {
     if (!capturedImage || !selectedActivity) return
     
     setIsValidating(true)
+    setValidationResult(null)
     
-    setTimeout(() => {
+    try {
+      const result = await blockchainService.validateEcoAction(capturedImage, selectedActivity)
+      setValidationResult(result)
       setIsValidating(false)
-      const tokensEarned = 50
+    } catch (error) {
+      setIsValidating(false)
+      alert('❌ Validation failed. Please try again.')
+    }
+  }
+
+  const handleSubmitToBlockchain = async () => {
+    if (!validationResult || !capturedImage) return
+    
+    setIsSubmitting(true)
+    
+    try {
+      const submission = await blockchainService.submitEcoAction({
+        type: selectedActivity,
+        imageHash: 'mock_hash_' + Date.now(),
+        timestamp: Date.now()
+      })
       
-      // Share to Farcaster if available
-      farcasterSDK.shareEcoAction(selectedActivity, tokensEarned)
-      
-      alert('🎉 Eco Action Verified! +50 $GREEN tokens earned!')
-      setCapturedImage(null)
-      setSelectedActivity('')
-    }, 2000)
+      if (submission.success) {
+        setTxHash(submission.txHash!)
+        
+        // Share to Farcaster
+        farcasterSDK.shareEcoAction(selectedActivity, validationResult.tokensToEarn)
+        
+        // Reset form after success
+        setTimeout(() => {
+          setCapturedImage(null)
+          setSelectedActivity('')
+          setValidationResult(null)
+          setTxHash(null)
+        }, 5000)
+      } else {
+        throw new Error(submission.error)
+      }
+    } catch (error) {
+      alert('❌ Blockchain submission failed. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
