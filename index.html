@@ -37,6 +37,23 @@
   </head>
   <body>
     <div id="root"></div>
+    <script type="module">
+      // Farcaster SDK early initialization
+      import { sdk } from 'https://esm.sh/@farcaster/miniapp-sdk'
+      window.farcasterSDK = sdk
+      
+      // Call ready() as soon as possible
+      window.addEventListener('DOMContentLoaded', async () => {
+        try {
+          console.log('🚀 Early Farcaster SDK initialization...')
+          await sdk.actions.ready()
+          console.log('✅ Early ready() call successful')
+          window.farcasterReady = true
+        } catch (error) {
+          console.error('❌ Early ready() failed:', error)
+        }
+      })
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
