@@ -1,4 +1,4 @@
-import { NETWORK_CONFIG, CONTRACT_ADDRESSES, getContractAddress } from '../contracts/addresses'
+import { NETWORK_CONFIG, getContractAddress } from '../contracts/addresses'
 
 interface EcoAction {
   type: string
@@ -60,7 +60,7 @@ export class BlockchainService {
     }
   }
 
-  async submitEcoAction(action: EcoAction, userAddress: string): Promise<{ success: boolean; txHash?: string; error?: string }> {
+  async submitEcoAction(action: EcoAction, _userAddress: string): Promise<{ success: boolean; txHash?: string; error?: string }> {
     try {
       console.log('Submitting eco action to blockchain...', action)
       
