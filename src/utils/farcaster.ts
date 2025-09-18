@@ -13,12 +13,10 @@ export const farcasterSDK = {
 
   async initialize() {
     try {
-      // Call ready to remove splash screen and initialize
-      await sdk.actions.ready()
+      // Get user context from SDK (ready() is called in main.tsx)
+      const context = await sdk.context
       this.isReady = true
       
-      // Get user context from SDK
-      const context = await sdk.context
       if (context?.user) {
         this.user = {
           fid: context.user.fid,
@@ -36,12 +34,12 @@ export const farcasterSDK = {
         }
       }
       
-      console.log('✅ Farcaster Mini App SDK initialized', { 
+      console.log('✅ Farcaster context loaded', { 
         user: this.user,
         context 
       })
     } catch (error) {
-      console.error('❌ Failed to initialize Farcaster SDK:', error)
+      console.error('❌ Failed to get Farcaster context:', error)
       // Fallback for development
       this.isReady = true
       this.user = {
