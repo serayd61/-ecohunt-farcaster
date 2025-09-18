@@ -30,19 +30,36 @@
     <meta name="twitter:image" content="https://ecohunt.vercel.app/og-image.png" />
     
     <!-- Early Farcaster SDK Initialization -->
-    <script src="https://cdn.jsdelivr.net/npm/@farcaster/miniapp-sdk@0.1.1/dist/index.umd.js"></script>
     <script>
       // Early SDK initialization to prevent splash screen persistence
-      (async function() {
-        try {
-          if (typeof window !== 'undefined' && window.FarcasterSDK) {
-            console.log('🔄 Early Farcaster SDK initialization...')
-            await window.FarcasterSDK.actions.ready()
-            window.farcasterReady = true
-            console.log('✅ Early SDK ready() called successfully')
+      (function() {
+        // Check if we're in Farcaster environment
+        if (typeof window !== 'undefined' && window.parent !== window) {
+          console.log('🔄 Early Farcaster environment detected...')
+          window.farcasterReady = false
+          
+          // Listen for SDK availability and call ready ASAP
+          const checkSDK = () => {
+            try {
+              if (window.sdk && window.sdk.actions && window.sdk.actions.ready) {
+                console.log('🔄 Early SDK found, calling ready()...')
+                window.sdk.actions.ready().then(() => {
+                  window.farcasterReady = true
+                  console.log('✅ Early SDK ready() called successfully')
+                }).catch(error => {
+                  console.warn('⚠️ Early SDK ready() failed:', error)
+                })
+              } else {
+                // SDK not ready yet, try again in 10ms
+                setTimeout(checkSDK, 10)
+              }
+            } catch (error) {
+              console.warn('⚠️ Early SDK check failed:', error)
+            }
           }
-        } catch (error) {
-          console.warn('⚠️ Early SDK initialization failed:', error)
+          
+          // Start checking immediately
+          setTimeout(checkSDK, 1)
         }
       })()
     </script>

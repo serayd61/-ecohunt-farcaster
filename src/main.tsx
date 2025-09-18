@@ -16,26 +16,18 @@ function AppWithFarcaster() {
       hasInitialized = true
       
       try {
-        // Wait for DOM to be fully ready
-        await new Promise(resolve => {
-          if (document.readyState === 'complete') {
-            resolve(void 0)
-          } else {
-            window.addEventListener('load', () => resolve(void 0))
-          }
-        })
+        console.log('🔄 React useEffect initializing Farcaster SDK immediately...')
         
-        console.log('🔄 DOM ready, initializing Farcaster SDK...')
-        
-        // Step 1: Call ready() to remove splash screen (if not already called)
+        // Call ready() IMMEDIATELY - don't wait for DOM complete
         if (!(window as any).farcasterReady) {
           await sdk.actions.ready()
           console.log('✅ Farcaster SDK ready() called from React')
+          ;(window as any).farcasterReady = true
         } else {
           console.log('✅ Farcaster SDK already ready from early initialization')
         }
         
-        // Step 2: Initialize our context wrapper
+        // Initialize our context wrapper
         await farcasterSDK.initialize()
         console.log('✅ EcoHunt SDK initialization complete')
       } catch (error) {
@@ -43,6 +35,7 @@ function AppWithFarcaster() {
       }
     }
     
+    // Call immediately - no delay
     initializeSDK()
     
     return () => {
