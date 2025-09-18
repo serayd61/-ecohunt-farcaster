@@ -54,7 +54,7 @@ export function Camera() {
         type: selectedActivity,
         imageHash: 'mock_hash_' + Date.now(),
         timestamp: Date.now()
-      })
+      }, farcasterSDK.getUser()?.fid.toString() || 'mock_user')
       
       if (submission.success) {
         // Share to Farcaster

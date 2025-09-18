@@ -1,4 +1,4 @@
-import { NETWORK_CONFIG } from '../contracts/addresses'
+import { NETWORK_CONFIG, CONTRACT_ADDRESSES, getContractAddress } from '../contracts/addresses'
 
 interface EcoAction {
   type: string
@@ -60,15 +60,22 @@ export class BlockchainService {
     }
   }
 
-  async submitEcoAction(action: EcoAction): Promise<{ success: boolean; txHash?: string; error?: string }> {
+  async submitEcoAction(action: EcoAction, userAddress: string): Promise<{ success: boolean; txHash?: string; error?: string }> {
     try {
       console.log('Submitting eco action to blockchain...', action)
       
-      // In production, this would interact with smart contracts
+      // For now, continue with mock implementation
+      // TODO: Implement real Web3 contract interaction when wallet is connected
       const mockTxHash = this.generateMockTxHash()
       
       // Simulate blockchain transaction
       await new Promise(resolve => setTimeout(resolve, 2000))
+      
+      console.log('Real contract addresses available:', {
+        greenToken: getContractAddress('GREEN_TOKEN', this.isTestnet),
+        ecoNFT: getContractAddress('ECO_NFT', this.isTestnet),
+        ecoHuntCore: getContractAddress('ECO_HUNT_CORE', this.isTestnet),
+      })
       
       return {
         success: true,
@@ -112,4 +119,4 @@ export class BlockchainService {
   }
 }
 
-export const blockchainService = new BlockchainService(true) // Default to testnet
+export const blockchainService = new BlockchainService(false) // Default to mainnet
