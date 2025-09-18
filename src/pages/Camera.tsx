@@ -58,7 +58,7 @@ export function Camera() {
       
       if (submission.success) {
         // Share to Farcaster
-        farcasterSDK.shareEcoAction(selectedActivity, validationResult.tokensToEarn)
+        await farcasterSDK.shareEcoAction(selectedActivity, validationResult.tokensToEarn)
         
         alert('🎉 Eco Action Verified! +' + validationResult.tokensToEarn + ' $GREEN tokens earned!')
         

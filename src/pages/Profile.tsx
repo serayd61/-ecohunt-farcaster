@@ -1,6 +1,8 @@
 import { Coins, Award, TreePine, Recycle, Car } from 'lucide-react'
+import { farcasterSDK } from '../utils/farcaster'
 
 export function Profile() {
+  const user = farcasterSDK.getUser()
   const userStats = {
     totalTokens: 1247,
     totalActions: 23,
@@ -35,13 +37,24 @@ export function Profile() {
     <div className="space-y-6">
       <div className="card">
         <div className="flex items-center space-x-4 mb-6">
-          <div className="w-16 h-16 bg-eco rounded-full flex items-center justify-center">
-            <span className="text-2xl text-white font-bold">🌱</span>
+          <div className="w-16 h-16 bg-eco rounded-full flex items-center justify-center overflow-hidden">
+            {user?.pfpUrl ? (
+              <img 
+                src={user.pfpUrl} 
+                alt={user.displayName}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <span className="text-2xl text-white font-bold">🌱</span>
+            )}
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">EcoWarrior_23</h1>
+            <h1 className="text-2xl font-bold text-gray-900">
+              {user?.displayName || 'EcoWarrior'}
+            </h1>
+            <p className="text-gray-600">@{user?.username || 'eco_user'}</p>
             <p className="text-gray-600">{userStats.level}</p>
-            <p className="text-sm text-gray-500">Member since {userStats.joinDate}</p>
+            <p className="text-sm text-gray-500">FID: {user?.fid || '12345'}</p>
           </div>
         </div>
 

@@ -1,3 +1,5 @@
+import { sdk } from '@farcaster/miniapp-sdk'
+
 interface FarcasterUser {
   fid: number
   username: string
@@ -5,40 +7,27 @@ interface FarcasterUser {
   pfpUrl?: string
 }
 
-interface FarcasterSDK {
-  user?: FarcasterUser
-  isAuthenticated: boolean
-  actions: {
-    openUrl: (url: string) => void
-    share: (text: string, embeds?: string[]) => void
-    sendNotification: (message: string) => void
-    close: () => void
-  }
-  ready: () => Promise<void>
-}
-
-declare global {
-  interface Window {
-    fc?: FarcasterSDK
-  }
-}
-
 export const farcasterSDK = {
   isReady: false,
   user: null as FarcasterUser | null,
 
   async initialize() {
-    if (typeof window === 'undefined') return
-    
     try {
-      if (window.fc) {
-        await window.fc.ready()
-        this.isReady = true
-        this.user = window.fc.user || null
-        console.log('Farcaster SDK initialized', { user: this.user })
+      // Call ready to remove splash screen and initialize
+      await sdk.actions.ready()
+      this.isReady = true
+      
+      // Get user context from SDK
+      const context = await sdk.context
+      if (context?.user) {
+        this.user = {
+          fid: context.user.fid,
+          username: context.user.username || 'eco_user',
+          displayName: context.user.displayName || 'Eco Warrior',
+          pfpUrl: context.user.pfpUrl
+        }
       } else {
-        console.log('Running outside Farcaster client - mock mode')
-        this.isReady = true
+        // Mock user for development
         this.user = {
           fid: 12345,
           username: 'ecowarrior_23',
@@ -46,8 +35,21 @@ export const farcasterSDK = {
           pfpUrl: undefined
         }
       }
+      
+      console.log('✅ Farcaster Mini App SDK initialized', { 
+        user: this.user,
+        context 
+      })
     } catch (error) {
-      console.error('Failed to initialize Farcaster SDK:', error)
+      console.error('❌ Failed to initialize Farcaster SDK:', error)
+      // Fallback for development
+      this.isReady = true
+      this.user = {
+        fid: 12345,
+        username: 'ecowarrior_23',
+        displayName: 'Eco Warrior',
+        pfpUrl: undefined
+      }
     }
   },
 
@@ -59,40 +61,48 @@ export const farcasterSDK = {
     return this.user
   },
 
-  shareEcoAction(activityType: string, tokensEarned: number) {
+  async shareEcoAction(activityType: string, tokensEarned: number) {
     const text = `🌱 Just completed "${activityType}" on EcoHunt and earned ${tokensEarned} $GREEN tokens! Join me in making the world greener! 🌍`
     
-    if (window.fc?.actions.share) {
-      window.fc.actions.share(text, ['https://ecohunt.vercel.app'])
-    } else {
+    try {
+      // Use official SDK cast composition method
+      await sdk.actions.composeCast({
+        text,
+        embeds: ['https://ecohunt-farcaster.vercel.app']
+      })
+    } catch (error) {
+      console.log('Sharing via SDK failed, using fallback:', error)
       // Fallback for web
       if (navigator.share) {
         navigator.share({
           title: 'EcoHunt Action Completed!',
           text,
-          url: 'https://ecohunt.vercel.app'
+          url: 'https://ecohunt-farcaster.vercel.app'
         })
       }
     }
   },
 
-  sendNotification(message: string) {
-    if (window.fc?.actions.sendNotification) {
-      window.fc.actions.sendNotification(message)
-    }
+  async sendNotification(message: string) {
+    // Notifications are handled server-side in Farcaster Mini Apps
+    console.log('Notification would be sent server-side:', message)
+    // In production, this would trigger a server-side notification
   },
 
-  openUrl(url: string) {
-    if (window.fc?.actions.openUrl) {
-      window.fc.actions.openUrl(url)
-    } else {
+  async openUrl(url: string) {
+    try {
+      await sdk.actions.openUrl(url)
+    } catch (error) {
+      console.log('Open URL failed, using fallback:', error)
       window.open(url, '_blank')
     }
   },
 
-  close() {
-    if (window.fc?.actions.close) {
-      window.fc.actions.close()
+  async close() {
+    try {
+      await sdk.actions.close()
+    } catch (error) {
+      console.log('Close failed:', error)
     }
   }
 }
