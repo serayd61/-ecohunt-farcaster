@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
-import { Camera as CameraIcon, Upload, Check, X } from 'lucide-react'
+import { Camera as CameraIcon, Upload, Check, X, Share2 } from 'lucide-react'
+import { farcasterSDK } from '../utils/farcaster'
 
 export function Camera() {
   const [isCapturing, setIsCapturing] = useState(false)
@@ -35,6 +36,11 @@ export function Camera() {
     
     setTimeout(() => {
       setIsValidating(false)
+      const tokensEarned = 50
+      
+      // Share to Farcaster if available
+      farcasterSDK.shareEcoAction(selectedActivity, tokensEarned)
+      
       alert('🎉 Eco Action Verified! +50 $GREEN tokens earned!')
       setCapturedImage(null)
       setSelectedActivity('')
