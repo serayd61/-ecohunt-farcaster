@@ -1,4 +1,4 @@
-import { Coins, Award, Calendar, TreePine, Recycle, Car } from 'lucide-react'
+import { Coins, Award, TreePine, Recycle, Car } from 'lucide-react'
 
 export function Profile() {
   const userStats = {

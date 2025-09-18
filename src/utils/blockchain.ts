@@ -1,4 +1,4 @@
-import { getContractAddress, NETWORK_CONFIG } from '../contracts/addresses'
+import { NETWORK_CONFIG } from '../contracts/addresses'
 
 interface EcoAction {
   type: string
@@ -25,17 +25,17 @@ export class BlockchainService {
     this.isTestnet = isTestnet
   }
 
-  async validateEcoAction(imageData: string, selectedAction: string): Promise<ValidationResult> {
+  async validateEcoAction(_imageData: string, selectedAction: string): Promise<ValidationResult> {
     // Simulate AI validation process
     console.log('Validating eco action with AI...', { selectedAction })
     
     // In production, this would call OpenAI Vision API
-    const mockValidation = await this.mockAIValidation(imageData, selectedAction)
+    const mockValidation = await this.mockAIValidation(_imageData, selectedAction)
     
     return mockValidation
   }
 
-  private async mockAIValidation(imageData: string, actionType: string): Promise<ValidationResult> {
+  private async mockAIValidation(_imageData: string, actionType: string): Promise<ValidationResult> {
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 1500))
     
@@ -82,7 +82,7 @@ export class BlockchainService {
     }
   }
 
-  async getUserStats(userAddress: string) {
+  async getUserStats(_userAddress: string) {
     // Mock user stats for demo
     return {
       totalTokens: 1247,
@@ -93,7 +93,7 @@ export class BlockchainService {
     }
   }
 
-  async getTokenBalance(userAddress: string): Promise<number> {
+  async getTokenBalance(_userAddress: string): Promise<number> {
     // Mock token balance
     return 1247
   }

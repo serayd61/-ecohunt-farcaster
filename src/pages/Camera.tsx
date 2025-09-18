@@ -1,16 +1,13 @@
 import { useState, useRef } from 'react'
-import { Camera as CameraIcon, Upload, Check, X, Share2, ExternalLink } from 'lucide-react'
+import { Camera as CameraIcon, Upload, Check, X } from 'lucide-react'
 import { farcasterSDK } from '../utils/farcaster'
 import { blockchainService } from '../utils/blockchain'
 
 export function Camera() {
-  const [isCapturing, setIsCapturing] = useState(false)
   const [capturedImage, setCapturedImage] = useState<string | null>(null)
   const [selectedActivity, setSelectedActivity] = useState('')
   const [isValidating, setIsValidating] = useState(false)
   const [validationResult, setValidationResult] = useState<any>(null)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [txHash, setTxHash] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const activities = [
@@ -52,8 +49,6 @@ export function Camera() {
   const handleSubmitToBlockchain = async () => {
     if (!validationResult || !capturedImage) return
     
-    setIsSubmitting(true)
-    
     try {
       const submission = await blockchainService.submitEcoAction({
         type: selectedActivity,
@@ -62,25 +57,22 @@ export function Camera() {
       })
       
       if (submission.success) {
-        setTxHash(submission.txHash!)
-        
         // Share to Farcaster
         farcasterSDK.shareEcoAction(selectedActivity, validationResult.tokensToEarn)
+        
+        alert('🎉 Eco Action Verified! +' + validationResult.tokensToEarn + ' $GREEN tokens earned!')
         
         // Reset form after success
         setTimeout(() => {
           setCapturedImage(null)
           setSelectedActivity('')
           setValidationResult(null)
-          setTxHash(null)
-        }, 5000)
+        }, 2000)
       } else {
         throw new Error(submission.error)
       }
     } catch (error) {
       alert('❌ Blockchain submission failed. Please try again.')
-    } finally {
-      setIsSubmitting(false)
     }
   }
 
@@ -162,23 +154,45 @@ export function Camera() {
               </div>
             )}
             
-            <button
-              onClick={handleValidation}
-              disabled={!selectedActivity || isValidating}
-              className="w-full btn-eco disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
-            >
-              {isValidating ? (
-                <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                  <span>Validating with AI...</span>
-                </>
-              ) : (
-                <>
+            {!validationResult ? (
+              <button
+                onClick={handleValidation}
+                disabled={!selectedActivity || isValidating}
+                className="w-full btn-eco disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+              >
+                {isValidating ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    <span>Validating with AI...</span>
+                  </>
+                ) : (
+                  <>
+                    <Check className="w-4 h-4" />
+                    <span>Validate & Earn $GREEN</span>
+                  </>
+                )}
+              </button>
+            ) : (
+              <div className="space-y-4">
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <h3 className="font-semibold text-green-800 mb-2">✅ Validation Successful!</h3>
+                  <div className="space-y-2 text-sm">
+                    <p><strong>Activity:</strong> {validationResult.actionType}</p>
+                    <p><strong>Confidence:</strong> {Math.round(validationResult.confidence * 100)}%</p>
+                    <p><strong>Tokens to Earn:</strong> {validationResult.tokensToEarn} $GREEN</p>
+                    <p><strong>Carbon Offset:</strong> {validationResult.estimatedCarbonOffset}g CO₂</p>
+                  </div>
+                </div>
+                
+                <button
+                  onClick={handleSubmitToBlockchain}
+                  className="w-full btn-eco flex items-center justify-center space-x-2"
+                >
                   <Check className="w-4 h-4" />
-                  <span>Validate & Earn $GREEN</span>
-                </>
-              )}
-            </button>
+                  <span>Claim Rewards</span>
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
