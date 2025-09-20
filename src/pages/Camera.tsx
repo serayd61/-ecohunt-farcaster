@@ -1,8 +1,9 @@
-import { useState, useRef } from 'react'
-import { Camera as CameraIcon, Upload, Check, X } from 'lucide-react'
+import { useState, useRef, useEffect } from 'react'
+import { Camera as CameraIcon, Upload, Check, X, ExternalLink } from 'lucide-react'
 import { farcasterSDK } from '../utils/farcaster'
 import { blockchainService } from '../utils/blockchain'
 import { useAccount } from 'wagmi'
+import { useEcoHuntCore } from '../hooks/useContracts'
 
 export function Camera() {
   const { address, isConnected } = useAccount()
@@ -12,6 +13,15 @@ export function Camera() {
   const [validationResult, setValidationResult] = useState<any>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
+  const {
+    completeEcoAction,
+    hash,
+    isPending,
+    isConfirming,
+    isConfirmed,
+    error: contractError
+  } = useEcoHuntCore()
+
   const activities = [
     '🚴 Bike Ride',
     '♻️ Recycling',
@@ -20,6 +30,41 @@ export function Camera() {
     '🥬 Gardening',
     '🌞 Solar Energy',
   ]
+
+  const actionTypeMapping: { [key: string]: string } = {
+    '🚴 Bike Ride': 'bike_ride',
+    '♻️ Recycling': 'recycling',
+    '🌳 Tree Planting': 'tree_planting',
+    '🧹 Cleanup': 'cleanup',
+    '🥬 Gardening': 'gardening',
+    '🌞 Solar Energy': 'solar_energy',
+  }
+
+  // Handle successful transaction
+  useEffect(() => {
+    if (isConfirmed && hash) {
+      // Share to Farcaster
+      farcasterSDK.shareEcoAction(selectedActivity, validationResult?.tokensToEarn || 0)
+
+      alert(`🎉 Eco Action Verified! +${validationResult?.tokensToEarn || 0} $GREEN tokens earned!
+      \nTransaction: ${hash}`)
+
+      // Reset form after success
+      setTimeout(() => {
+        setCapturedImage(null)
+        setSelectedActivity('')
+        setValidationResult(null)
+      }, 2000)
+    }
+  }, [isConfirmed, hash, selectedActivity, validationResult])
+
+  // Handle contract errors
+  useEffect(() => {
+    if (contractError) {
+      console.error('Contract error:', contractError)
+      alert(`❌ Transaction failed: ${contractError.message}`)
+    }
+  }, [contractError])
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -57,28 +102,12 @@ export function Camera() {
     }
 
     try {
-      const submission = await blockchainService.submitEcoAction({
-        type: selectedActivity,
-        imageHash: 'ipfs_hash_' + Date.now(), // In production, upload to IPFS
-        timestamp: Date.now()
-      }, address)
+      const imageHash = 'ipfs_hash_' + Date.now() // In production, upload to IPFS
+      const contractActionType = actionTypeMapping[selectedActivity] || 'recycling'
 
-      if (submission.success) {
-        // Share to Farcaster
-        await farcasterSDK.shareEcoAction(selectedActivity, validationResult.tokensToEarn)
+      await completeEcoAction(address, contractActionType, imageHash)
 
-        alert(`🎉 Eco Action Verified! +${validationResult.tokensToEarn} $GREEN tokens earned!
-        \nTransaction: ${submission.txHash}`)
-
-        // Reset form after success
-        setTimeout(() => {
-          setCapturedImage(null)
-          setSelectedActivity('')
-          setValidationResult(null)
-        }, 2000)
-      } else {
-        throw new Error(submission.error)
-      }
+      // Transaction handling is done in useEffect
     } catch (error) {
       console.error('Blockchain submission error:', error)
       alert('❌ Blockchain submission failed. Make sure you have ETH for gas fees and try again.')
@@ -195,12 +224,45 @@ export function Camera() {
                 
                 <button
                   onClick={handleSubmitToBlockchain}
-                  disabled={!isConnected}
+                  disabled={!isConnected || isPending || isConfirming}
                   className="w-full btn-eco flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <Check className="w-4 h-4" />
-                  <span>{isConnected ? 'Claim Rewards' : 'Connect Wallet to Claim'}</span>
+                  {isPending || isConfirming ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      <span>
+                        {isPending ? 'Confirm in Wallet...' : 'Confirming Transaction...'}
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <Check className="w-4 h-4" />
+                      <span>{isConnected ? 'Claim Rewards' : 'Connect Wallet to Claim'}</span>
+                    </>
+                  )}
                 </button>
+
+                {hash && (
+                  <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-blue-800">
+                        Transaction Hash:
+                      </span>
+                      <a
+                        href={`https://explorer.zora.energy/tx/${hash}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center space-x-1 text-blue-600 hover:text-blue-800"
+                      >
+                        <span className="text-sm font-mono">{hash.slice(0, 10)}...{hash.slice(-8)}</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    </div>
+                    <div className="mt-2 text-xs text-blue-600">
+                      {isConfirming ? '⏳ Confirming...' : isConfirmed ? '✅ Confirmed!' : '📤 Pending...'}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
