@@ -2,8 +2,10 @@ import { useState, useRef } from 'react'
 import { Camera as CameraIcon, Upload, Check, X } from 'lucide-react'
 import { farcasterSDK } from '../utils/farcaster'
 import { blockchainService } from '../utils/blockchain'
+import { useAccount } from 'wagmi'
 
 export function Camera() {
+  const { address, isConnected } = useAccount()
   const [capturedImage, setCapturedImage] = useState<string | null>(null)
   const [selectedActivity, setSelectedActivity] = useState('')
   const [isValidating, setIsValidating] = useState(false)
@@ -48,20 +50,26 @@ export function Camera() {
 
   const handleSubmitToBlockchain = async () => {
     if (!validationResult || !capturedImage) return
-    
+
+    if (!isConnected || !address) {
+      alert('❌ Please connect your wallet first!')
+      return
+    }
+
     try {
       const submission = await blockchainService.submitEcoAction({
         type: selectedActivity,
-        imageHash: 'mock_hash_' + Date.now(),
+        imageHash: 'ipfs_hash_' + Date.now(), // In production, upload to IPFS
         timestamp: Date.now()
-      }, farcasterSDK.getUser()?.fid.toString() || 'mock_user')
-      
+      }, address)
+
       if (submission.success) {
         // Share to Farcaster
         await farcasterSDK.shareEcoAction(selectedActivity, validationResult.tokensToEarn)
-        
-        alert('🎉 Eco Action Verified! +' + validationResult.tokensToEarn + ' $GREEN tokens earned!')
-        
+
+        alert(`🎉 Eco Action Verified! +${validationResult.tokensToEarn} $GREEN tokens earned!
+        \nTransaction: ${submission.txHash}`)
+
         // Reset form after success
         setTimeout(() => {
           setCapturedImage(null)
@@ -72,7 +80,8 @@ export function Camera() {
         throw new Error(submission.error)
       }
     } catch (error) {
-      alert('❌ Blockchain submission failed. Please try again.')
+      console.error('Blockchain submission error:', error)
+      alert('❌ Blockchain submission failed. Make sure you have ETH for gas fees and try again.')
     }
   }
 
@@ -186,10 +195,11 @@ export function Camera() {
                 
                 <button
                   onClick={handleSubmitToBlockchain}
-                  className="w-full btn-eco flex items-center justify-center space-x-2"
+                  disabled={!isConnected}
+                  className="w-full btn-eco flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Check className="w-4 h-4" />
-                  <span>Claim Rewards</span>
+                  <span>{isConnected ? 'Claim Rewards' : 'Connect Wallet to Claim'}</span>
                 </button>
               </div>
             )}

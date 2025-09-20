@@ -18,10 +18,14 @@
   "dependencies": {
     "@farcaster/create-mini-app": "^0.1.0",
     "@farcaster/miniapp-sdk": "^0.1.10",
+    "@rainbow-me/rainbowkit": "^2.2.8",
+    "@tanstack/react-query": "^5.89.0",
     "lucide-react": "^0.544.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "react-router-dom": "^7.9.1"
+    "react-router-dom": "^7.9.1",
+    "viem": "^2.37.7",
+    "wagmi": "^2.17.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.35.0",

@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import { Home, Camera, User, Trophy, Leaf } from 'lucide-react'
+import { WalletButton } from './WalletButton'
 
 export function Navbar() {
   const location = useLocation()
@@ -21,6 +22,10 @@ export function Navbar() {
             </div>
             <span className="text-xl font-bold text-gray-900">EcoHunt</span>
           </Link>
+
+          <div className="hidden md:block">
+            <WalletButton />
+          </div>
           
           <div className="flex space-x-1">
             {navItems.map(({ path, icon: Icon, label }) => (
