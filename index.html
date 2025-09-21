@@ -6,23 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>🌱 EcoHunt - Earn $GREEN Tokens</title>
     
-    <!-- Farcaster Frame Configuration -->
-    <meta property="fc:frame" content="vNext" />
-    <meta property="fc:frame:version" content="2.0" />
-    <meta property="fc:frame:image" content="https://ecohunt-farcaster.vercel.app/og-image.svg" />
-    <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
-    <meta property="fc:frame:button:1" content="🌱 Start EcoHunt" />
-    <meta property="fc:frame:button:1:action" content="link" />
-    <meta property="fc:frame:button:1:target" content="https://ecohunt-farcaster.vercel.app" />
-    
     <!-- Farcaster Mini App Configuration -->
-    <meta property="fc:miniapp" content='{
-      "version": "2.0",
-      "name": "EcoHunt",
-      "description": "Gamified environmental action platform. Earn $GREEN tokens by completing eco-friendly activities!",
-      "icon": "🌱",
-      "url": "https://ecohunt-farcaster.vercel.app",
-      "id": "ecohunt-miniapp"
+    <meta name="fc:miniapp" content='{
+      "version": "1",
+      "imageUrl": "https://ecohunt-farcaster.vercel.app/og-image.svg",
+      "button": {
+        "title": "🌱 Start EcoHunt",
+        "action": {
+          "type": "launch_frame",
+          "url": "https://ecohunt-farcaster.vercel.app",
+          "name": "EcoHunt",
+          "splashImageUrl": "https://ecohunt-farcaster.vercel.app/og-image.svg",
+          "splashBackgroundColor": "#10b981"
+        }
+      }
     }' />
     
     <!-- Open Graph Meta Tags -->

@@ -11,6 +11,19 @@ export const farcasterSDK = {
   isReady: false,
   user: null as FarcasterUser | null,
 
+  isInitialized(): boolean {
+    return this.isReady
+  },
+
+  async getEthereumProvider() {
+    try {
+      return await sdk.wallet.getEthereumProvider()
+    } catch (error) {
+      console.error('Failed to get Ethereum provider:', error)
+      return null
+    }
+  },
+
   async initialize() {
     try {
       // Get user context from SDK (ready() is called in main.tsx)

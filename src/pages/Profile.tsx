@@ -1,5 +1,6 @@
 import { Coins, Award, TreePine, Recycle, Car } from 'lucide-react'
 import { farcasterSDK } from '../utils/farcaster'
+import { WalletConnection } from '../components/WalletConnection'
 
 export function Profile() {
   const user = farcasterSDK.getUser()
@@ -73,6 +74,8 @@ export function Profile() {
           </div>
         </div>
       </div>
+
+      <WalletConnection />
 
       <div className="grid grid-cols-2 gap-4">
         <div className="card text-center">
