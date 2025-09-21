@@ -4,6 +4,7 @@ import './index.css'
 import App from './App.tsx'
 import { sdk } from '@farcaster/miniapp-sdk'
 import { farcasterSDK } from './utils/farcaster'
+import { WalletProvider } from './providers/WalletProvider'
 
 function AppWithFarcaster() {
 
@@ -44,7 +45,11 @@ function AppWithFarcaster() {
   }, [])
 
   // Show app immediately but call ready() when fully loaded
-  return <App />
+  return (
+    <WalletProvider>
+      <App />
+    </WalletProvider>
+  )
 }
 
 // Remove StrictMode to avoid double initialization

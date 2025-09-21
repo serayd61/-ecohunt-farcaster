@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { WalletProvider } from './hooks/useWallet'
+import { WalletProvider } from './providers/WalletProvider'
 import { Navbar } from './components/Navbar'
 import { Home } from './pages/Home'
 import { Camera } from './pages/Camera'

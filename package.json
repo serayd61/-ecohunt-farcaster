@@ -18,6 +18,7 @@
   "dependencies": {
     "@farcaster/create-mini-app": "^0.1.0",
     "@farcaster/miniapp-sdk": "^0.1.10",
+    "@rainbow-me/rainbowkit": "^2.2.8",
     "@tanstack/react-query": "^5.89.0",
     "@wagmi/connectors": "^5.10.1",
     "@wagmi/core": "^2.21.0",

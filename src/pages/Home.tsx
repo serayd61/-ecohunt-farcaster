@@ -1,11 +1,33 @@
 import { Camera, Coins, Award, Users } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { useAccount } from 'wagmi'
+import { useUserProfile, useTokenBalance, useUserNFTs } from '../hooks/useContracts'
 
 export function Home() {
+  const { address, isConnected } = useAccount()
+  const { profile, isLoading: profileLoading } = useUserProfile(address)
+  const { balanceFormatted, isLoading: balanceLoading } = useTokenBalance(address)
+  const { nftCount } = useUserNFTs(address)
+
   const stats = [
-    { icon: Coins, label: '$GREEN Earned', value: '1,247', color: 'text-green-600' },
-    { icon: Award, label: 'Eco Actions', value: '23', color: 'text-blue-600' },
-    { icon: Users, label: 'Global Rank', value: '#156', color: 'text-purple-600' },
+    {
+      icon: Coins,
+      label: '$GREEN Earned',
+      value: isConnected ? (balanceLoading ? '...' : Math.round(balanceFormatted).toLocaleString()) : '0',
+      color: 'text-green-600'
+    },
+    {
+      icon: Award,
+      label: 'Eco Actions',
+      value: isConnected ? (profileLoading ? '...' : (profile ? Number(profile.totalActions) : 0).toString()) : '0',
+      color: 'text-blue-600'
+    },
+    {
+      icon: Users,
+      label: 'NFTs Earned',
+      value: isConnected ? nftCount.toString() : '0',
+      color: 'text-purple-600'
+    },
   ]
 
   const activities = [

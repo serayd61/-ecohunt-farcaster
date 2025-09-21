@@ -1,17 +1,37 @@
-import { Coins, Award, TreePine, Recycle, Car } from 'lucide-react'
+import { Coins, Award, TreePine, Recycle, Car, ExternalLink } from 'lucide-react'
 import { farcasterSDK } from '../utils/farcaster'
+import { useAccount } from 'wagmi'
+import { useUserProfile, useTokenBalance, useUserNFTs } from '../hooks/useContracts'
 import { WalletConnection } from '../components/WalletConnection'
 
 export function Profile() {
   const user = farcasterSDK.getUser()
+  const { address, isConnected } = useAccount()
+
+  // Contract data hooks
+  const { profile, isLoading: profileLoading } = useUserProfile(address)
+  const { balanceFormatted, isLoading: balanceLoading } = useTokenBalance(address)
+  const { nftCount, carbonOffsetFormatted, isLoading: nftLoading } = useUserNFTs(address)
+
+  // Calculate level and progress
+  const currentLevel = profile ? Number(profile.level) : 0
+  const totalActions = profile ? Number(profile.totalActions) : 0
+  const progressToNextLevel = totalActions > 0 ? ((totalActions % 10) / 10) * 100 : 0
+
   const userStats = {
-    totalTokens: 1247,
-    totalActions: 23,
+    totalTokens: Math.round(balanceFormatted),
+    totalActions,
     joinDate: 'March 2024',
-    carbonSaved: '156 kg',
-    level: 'Eco Warrior',
-    nextLevel: 'Green Guardian',
-    progress: 65
+    carbonSaved: `${(carbonOffsetFormatted / 1000).toFixed(1)} kg`,
+    level: currentLevel === 0 ? 'Eco Starter' :
+           currentLevel === 1 ? 'Eco Warrior' :
+           currentLevel === 2 ? 'Green Guardian' :
+           currentLevel >= 3 ? 'Planet Hero' : 'Eco Starter',
+    nextLevel: currentLevel === 0 ? 'Eco Warrior' :
+               currentLevel === 1 ? 'Green Guardian' :
+               currentLevel === 2 ? 'Planet Hero' :
+               'Planet Savior',
+    progress: Math.round(progressToNextLevel)
   }
 
   const badges = [
@@ -29,10 +49,49 @@ export function Profile() {
   ]
 
   const impactStats = [
-    { icon: TreePine, label: 'Trees Equivalent', value: '12', color: 'text-green-600' },
-    { icon: Recycle, label: 'Items Recycled', value: '45', color: 'text-blue-600' },
-    { icon: Car, label: 'Miles Biked', value: '78', color: 'text-purple-600' },
+    { icon: TreePine, label: 'Trees Equivalent', value: Math.round(carbonOffsetFormatted / 22000).toString(), color: 'text-green-600' },
+    { icon: Recycle, label: 'NFTs Earned', value: nftCount.toString(), color: 'text-blue-600' },
+    { icon: Car, label: 'CO₂ Saved (g)', value: carbonOffsetFormatted.toString(), color: 'text-purple-600' },
   ]
+
+  // Show loading state
+  if (profileLoading || balanceLoading || nftLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="card">
+          <div className="animate-pulse">
+            <div className="flex items-center space-x-4 mb-6">
+              <div className="w-16 h-16 bg-gray-300 rounded-full"></div>
+              <div className="space-y-2">
+                <div className="h-6 bg-gray-300 rounded w-32"></div>
+                <div className="h-4 bg-gray-300 rounded w-24"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="text-center py-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto"></div>
+          <p className="mt-2 text-gray-600">Loading your profile...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Show connect wallet message
+  if (!isConnected) {
+    return (
+      <div className="space-y-6">
+        <WalletConnection />
+        <div className="card text-center py-8">
+          <h2 className="text-xl font-semibold mb-4 text-gray-900">Connect Your Wallet</h2>
+          <p className="text-gray-600 mb-4">
+            Connect your wallet to view your EcoHunt profile and statistics.
+          </p>
+          <div className="text-4xl mb-4">🔒</div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6">
@@ -105,6 +164,20 @@ export function Profile() {
           <p className="text-sm text-green-800">
             🌍 You've saved <strong>{userStats.carbonSaved}</strong> of CO₂ emissions!
           </p>
+          {address && (
+            <div className="mt-2 flex items-center justify-center space-x-2">
+              <span className="text-xs text-gray-600">Wallet:</span>
+              <a
+                href={`https://explorer.zora.energy/address/${address}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-1 text-xs text-blue-600 hover:text-blue-800"
+              >
+                <span className="font-mono">{address.slice(0, 6)}...{address.slice(-4)}</span>
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            </div>
+          )}
         </div>
       </div>
 

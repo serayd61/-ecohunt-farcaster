@@ -20,8 +20,8 @@ interface ValidationResult {
 
 export class BlockchainService {
   private isTestnet: boolean
-  
-  constructor(isTestnet = true) {
+
+  constructor(isTestnet = false) {
     this.isTestnet = isTestnet
   }
 
@@ -60,28 +60,33 @@ export class BlockchainService {
     }
   }
 
-  async submitEcoAction(action: EcoAction, _userAddress: string): Promise<{ success: boolean; txHash?: string; error?: string }> {
+  async submitEcoAction(action: EcoAction, userAddress: string): Promise<{ success: boolean; txHash?: string; error?: string }> {
     try {
       console.log('Submitting eco action to blockchain...', action)
-      
-      // For now, continue with mock implementation
-      // TODO: Implement real Web3 contract interaction when wallet is connected
-      const mockTxHash = this.generateMockTxHash()
-      
-      // Simulate blockchain transaction
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      
-      console.log('Real contract addresses available:', {
-        greenToken: getContractAddress('GREEN_TOKEN', this.isTestnet),
-        ecoNFT: getContractAddress('ECO_NFT', this.isTestnet),
-        ecoHuntCore: getContractAddress('ECO_HUNT_CORE', this.isTestnet),
+
+      // Create action hash for uniqueness
+      const actionHash = this.createActionHash(action, userAddress)
+
+      // Get contract address
+      const coreAddress = getContractAddress('ECO_HUNT_CORE', this.isTestnet)
+
+      console.log('📝 Transaction details:', {
+        contract: coreAddress,
+        action: this.mapActionTypeToContract(action.type),
+        user: userAddress,
+        hash: actionHash
       })
-      
+
+      // For now, simulate successful transaction
+      // TODO: Implement actual contract call with useWriteContract hook
+      const mockTxHash = '0x' + Math.random().toString(16).substr(2, 64)
+
       return {
         success: true,
         txHash: mockTxHash
       }
     } catch (error) {
+      console.error('❌ Blockchain submission failed:', error)
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error'
@@ -89,25 +94,69 @@ export class BlockchainService {
     }
   }
 
-  async getUserStats(_userAddress: string) {
-    // Mock user stats for demo
-    return {
-      totalTokens: 1247,
-      totalActions: 23,
-      carbonSaved: 15600, // grams
-      level: 2,
-      nftCount: 2
+  private createActionHash(action: EcoAction, userAddress: string): `0x${string}` {
+    const hashString = `${userAddress}-${action.type}-${action.timestamp}-${action.imageHash}`
+    // Simple hash function for browser compatibility
+    let hash = 0;
+    for (let i = 0; i < hashString.length; i++) {
+      const char = hashString.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32bit integer
+    }
+    const hashHex = Math.abs(hash).toString(16).padStart(64, '0');
+    return `0x${hashHex}` as `0x${string}`
+  }
+
+  private mapActionTypeToContract(displayType: string): string {
+    const mapping: { [key: string]: string } = {
+      '🚴 Bike Ride': 'bike_ride',
+      '♻️ Recycling': 'recycling',
+      '🌳 Tree Planting': 'tree_planting',
+      '🧹 Cleanup': 'cleanup',
+      '🥬 Gardening': 'gardening',
+      '🌞 Solar Energy': 'solar_energy',
+    }
+    return mapping[displayType] || 'recycling'
+  }
+
+  async getUserStats(userAddress: string) {
+    try {
+      console.log('📊 Fetching user stats for:', userAddress)
+
+      // For now, return mock data
+      // TODO: Implement actual contract reads with useReadContract hooks
+      return {
+        totalTokens: 0,
+        totalActions: 0,
+        carbonSaved: 0,
+        level: 0,
+        nftCount: 0
+      }
+    } catch (error) {
+      console.error('Error fetching user stats:', error)
+      return {
+        totalTokens: 0,
+        totalActions: 0,
+        carbonSaved: 0,
+        level: 0,
+        nftCount: 0
+      }
     }
   }
 
-  async getTokenBalance(_userAddress: string): Promise<number> {
-    // Mock token balance
-    return 1247
+  async getTokenBalance(userAddress: string): Promise<number> {
+    try {
+      console.log('💰 Fetching token balance for:', userAddress)
+
+      // For now, return mock balance
+      // TODO: Implement actual balance read with useReadContract hook
+      return 0
+    } catch (error) {
+      console.error('Error fetching token balance:', error)
+      return 0
+    }
   }
 
-  private generateMockTxHash(): string {
-    return '0x' + Array.from({length: 64}, () => Math.floor(Math.random() * 16).toString(16)).join('')
-  }
 
   getExplorerUrl(txHash: string): string {
     const config = this.isTestnet ? NETWORK_CONFIG.ZORA_TESTNET : NETWORK_CONFIG.ZORA_MAINNET

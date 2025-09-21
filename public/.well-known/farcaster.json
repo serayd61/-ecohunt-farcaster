@@ -1,39 +1,10 @@
 {
-  "accountAssociation": {
-    "header": "eyJmaWQiOjEyMzQ1LCJ0eXBlIjoiY3VzdG9keSIsImtleSI6IjB4MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCJ9",
-    "payload": "eyJkb21haW4iOiJlY29odW50LWZhcmNhc3Rlci52ZXJjZWwuYXBwIn0",
-    "signature": "MHg..."
-  },
-  "miniApps": [
-    {
-      "name": "EcoHunt",
-      "description": "Gamified environmental action platform. Earn $GREEN tokens by completing eco-friendly activities!",
-      "icon": "🌱",
-      "url": "https://ecohunt-farcaster.vercel.app",
-      "id": "ecohunt-miniapp",
-      "version": "1.0.0",
-      "category": "lifestyle",
-      "permissions": [
-        "camera",
-        "share",
-        "notifications"
-      ],
-      "features": [
-        "photo-capture",
-        "token-rewards",
-        "social-sharing",
-        "leaderboard"
-      ],
-      "screenshots": [
-        {
-          "url": "https://ecohunt-farcaster.vercel.app/screenshot-home.png",
-          "alt": "EcoHunt home screen showing daily eco activities"
-        },
-        {
-          "url": "https://ecohunt-farcaster.vercel.app/screenshot-camera.png", 
-          "alt": "Camera interface for capturing eco actions"
-        }
-      ]
-    }
-  ]
+  "version": "1",
+  "name": "EcoHunt",
+  "subtitle": "Earn $GREEN tokens for eco-friendly actions",
+  "description": "Gamified environmental action platform where users earn $GREEN tokens and carbon offset NFTs by completing eco-friendly activities. Validate your eco-actions with AI-powered photo verification and contribute to a sustainable future.",
+  "homeUrl": "https://ecohunt-farcaster.vercel.app",
+  "iconUrl": "https://ecohunt-farcaster.vercel.app/icon.png",
+  "categories": ["gaming", "defi"],
+  "tags": ["green", "sustainability", "rewards", "nft", "carbon-offset", "environment", "eco", "climate"]
 }
