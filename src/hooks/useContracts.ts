@@ -66,20 +66,29 @@ export function useUserProfile(userAddress?: string) {
     functionName: 'getUserProfile',
     args: userAddress ? [userAddress as `0x${string}`] : undefined,
     query: {
-      enabled: !!userAddress,
+      enabled: !!userAddress && ECO_HUNT_CORE_ADDRESS !== '0x...',
     }
   })
 
+  // Return mock data if contract not available
+  const mockProfile = {
+    totalActions: BigInt(8),
+    totalTokensEarned: BigInt(340),
+    level: BigInt(1),
+    carbonSaved: BigInt(2400),
+    username: 'eco_warrior'
+  }
+
   return {
-    profile: profile as {
+    profile: (profile || (userAddress ? mockProfile : undefined)) as {
       totalActions: bigint
       totalTokensEarned: bigint
       level: bigint
       carbonSaved: bigint
       username: string
     } | undefined,
-    isLoading,
-    error
+    isLoading: ECO_HUNT_CORE_ADDRESS === '0x...' ? false : isLoading,
+    error: ECO_HUNT_CORE_ADDRESS === '0x...' ? null : error
   }
 }
 
@@ -90,15 +99,18 @@ export function useTokenBalance(userAddress?: string) {
     functionName: 'balanceOf',
     args: userAddress ? [userAddress as `0x${string}`] : undefined,
     query: {
-      enabled: !!userAddress,
+      enabled: !!userAddress && GREEN_TOKEN_ADDRESS !== '0x...',
     }
   })
 
+  // Mock balance if contract not available
+  const mockBalance = BigInt(Math.floor(Math.random() * 500 + 50) * 1e18)
+
   return {
-    balance: balance as bigint | undefined,
-    balanceFormatted: balance ? Number(balance) / 1e18 : 0,
-    isLoading,
-    error
+    balance: (balance || (userAddress ? mockBalance : undefined)) as bigint | undefined,
+    balanceFormatted: balance ? Number(balance) / 1e18 : (userAddress ? Number(mockBalance) / 1e18 : 0),
+    isLoading: GREEN_TOKEN_ADDRESS === '0x...' ? false : isLoading,
+    error: GREEN_TOKEN_ADDRESS === '0x...' ? null : error
   }
 }
 
@@ -109,7 +121,7 @@ export function useUserNFTs(userAddress?: string) {
     functionName: 'getUserNFTs',
     args: userAddress ? [userAddress as `0x${string}`] : undefined,
     query: {
-      enabled: !!userAddress,
+      enabled: !!userAddress && ECO_NFT_ADDRESS !== '0x...',
     }
   })
 
@@ -119,17 +131,21 @@ export function useUserNFTs(userAddress?: string) {
     functionName: 'getUserCarbonOffset',
     args: userAddress ? [userAddress as `0x${string}`] : undefined,
     query: {
-      enabled: !!userAddress,
+      enabled: !!userAddress && ECO_NFT_ADDRESS !== '0x...',
     }
   })
 
+  // Mock data if contracts not available
+  const mockNfts = userAddress ? [BigInt(1), BigInt(2), BigInt(3)] : []
+  const mockCarbonOffset = BigInt(Math.floor(Math.random() * 5000 + 1000))
+
   return {
-    nfts: nfts as bigint[] | undefined,
-    nftCount: nfts ? nfts.length : 0,
-    carbonOffset: carbonOffset as bigint | undefined,
-    carbonOffsetFormatted: carbonOffset ? Number(carbonOffset) : 0,
-    isLoading: isLoading || carbonLoading,
-    error
+    nfts: (nfts || mockNfts) as bigint[] | undefined,
+    nftCount: nfts ? nfts.length : (userAddress ? mockNfts.length : 0),
+    carbonOffset: (carbonOffset || (userAddress ? mockCarbonOffset : undefined)) as bigint | undefined,
+    carbonOffsetFormatted: carbonOffset ? Number(carbonOffset) : (userAddress ? Number(mockCarbonOffset) : 0),
+    isLoading: ECO_NFT_ADDRESS === '0x...' ? false : (isLoading || carbonLoading),
+    error: ECO_NFT_ADDRESS === '0x...' ? null : error
   }
 }
 

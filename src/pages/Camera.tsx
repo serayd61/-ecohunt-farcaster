@@ -4,13 +4,19 @@ import { farcasterSDK } from '../utils/farcaster'
 import { blockchainService } from '../utils/blockchain'
 import { useAccount } from 'wagmi'
 import { useEcoHuntCore } from '../hooks/useContracts'
+import { WalletConnection } from '../components/WalletConnection'
 
 export function Camera() {
   const { address, isConnected } = useAccount()
   const [capturedImage, setCapturedImage] = useState<string | null>(null)
   const [selectedActivity, setSelectedActivity] = useState('')
   const [isValidating, setIsValidating] = useState(false)
-  const [validationResult, setValidationResult] = useState<any>(null)
+  const [validationResult, setValidationResult] = useState<{
+    actionType: string
+    confidence: number
+    tokensToEarn: number
+    estimatedCarbonOffset: number
+  } | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const {
@@ -87,7 +93,7 @@ export function Camera() {
       const result = await blockchainService.validateEcoAction(capturedImage, selectedActivity)
       setValidationResult(result)
       setIsValidating(false)
-    } catch (error) {
+    } catch {
       setIsValidating(false)
       alert('❌ Validation failed. Please try again.')
     }
@@ -268,6 +274,16 @@ export function Camera() {
           </div>
         )}
       </div>
+
+      {!isConnected && (
+        <div className="card">
+          <h3 className="text-lg font-semibold mb-3 text-gray-900">Connect Wallet to Claim Rewards</h3>
+          <WalletConnection />
+          <p className="text-sm text-gray-600 mt-3">
+            Connect your wallet to the Zora network to claim your $GREEN token rewards.
+          </p>
+        </div>
+      )}
 
       <div className="card bg-blue-50 border-blue-200">
         <h3 className="text-lg font-semibold mb-2 text-blue-900">Pro Tips 💡</h3>
