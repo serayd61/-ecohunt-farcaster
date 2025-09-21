@@ -7,27 +7,13 @@ import { farcasterSDK } from './utils/farcaster'
 import { WalletProvider } from './providers/WalletProvider'
 
 function AppWithFarcaster() {
-
   useEffect(() => {
-    let hasInitialized = false
-    
     const initializeSDK = async () => {
-      // Prevent multiple initializations in StrictMode
-      if (hasInitialized) return
-      hasInitialized = true
-      
       try {
-        console.log('🔄 React useEffect initializing Farcaster SDK immediately...')
-        
-        // Call ready() IMMEDIATELY - don't wait for DOM complete
-        if (!(window as any).farcasterReady) {
-          await sdk.actions.ready()
-          console.log('✅ Farcaster SDK ready() called from React')
-          ;(window as any).farcasterReady = true
-        } else {
-          console.log('✅ Farcaster SDK already ready from early initialization')
-        }
-        
+        // Call ready() when interface is fully loaded (per guide)
+        await sdk.actions.ready()
+        console.log('✅ Farcaster SDK ready() called')
+
         // Initialize our context wrapper
         await farcasterSDK.initialize()
         console.log('✅ EcoHunt SDK initialization complete')
@@ -35,16 +21,10 @@ function AppWithFarcaster() {
         console.error('❌ Error initializing SDK:', error)
       }
     }
-    
-    // Call immediately - no delay
+
     initializeSDK()
-    
-    return () => {
-      hasInitialized = false
-    }
   }, [])
 
-  // Show app immediately but call ready() when fully loaded
   return (
     <WalletProvider>
       <App />

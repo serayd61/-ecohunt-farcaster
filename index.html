@@ -9,14 +9,14 @@
     <!-- Farcaster Mini App Configuration -->
     <meta name="fc:miniapp" content='{
       "version": "1",
-      "imageUrl": "https://ecohunt-farcaster.vercel.app/og-image.svg",
+      "imageUrl": "https://ecohunt-farcaster.vercel.app/preview.png",
       "button": {
         "title": "🌱 Start EcoHunt",
         "action": {
           "type": "launch_frame",
           "url": "https://ecohunt-farcaster.vercel.app",
           "name": "EcoHunt",
-          "splashImageUrl": "https://ecohunt-farcaster.vercel.app/og-image.svg",
+          "splashImageUrl": "https://ecohunt-farcaster.vercel.app/splash.png",
           "splashBackgroundColor": "#10b981"
         }
       }
@@ -35,40 +35,6 @@
     <meta name="twitter:description" content="Turn your eco-friendly actions into $GREEN tokens and NFTs. Join the gamified environmental revolution!" />
     <meta name="twitter:image" content="https://ecohunt-farcaster.vercel.app/og-image.svg" />
     
-    <!-- Early Farcaster SDK Initialization -->
-    <script>
-      // Early SDK initialization to prevent splash screen persistence
-      (function() {
-        // Check if we're in Farcaster environment
-        if (typeof window !== 'undefined' && window.parent !== window) {
-          console.log('🔄 Early Farcaster environment detected...')
-          window.farcasterReady = false
-          
-          // Listen for SDK availability and call ready ASAP
-          const checkSDK = () => {
-            try {
-              if (window.sdk && window.sdk.actions && window.sdk.actions.ready) {
-                console.log('🔄 Early SDK found, calling ready()...')
-                window.sdk.actions.ready().then(() => {
-                  window.farcasterReady = true
-                  console.log('✅ Early SDK ready() called successfully')
-                }).catch(error => {
-                  console.warn('⚠️ Early SDK ready() failed:', error)
-                })
-              } else {
-                // SDK not ready yet, try again in 10ms
-                setTimeout(checkSDK, 10)
-              }
-            } catch (error) {
-              console.warn('⚠️ Early SDK check failed:', error)
-            }
-          }
-          
-          // Start checking immediately
-          setTimeout(checkSDK, 1)
-        }
-      })()
-    </script>
     
     <!-- Theme Colors -->
     <meta name="theme-color" content="#34d399" />
@@ -78,23 +44,6 @@
   </head>
   <body>
     <div id="root"></div>
-    <script type="module">
-      // Farcaster SDK early initialization
-      import { sdk } from 'https://esm.sh/@farcaster/miniapp-sdk'
-      window.farcasterSDK = sdk
-      
-      // Call ready() as soon as possible
-      window.addEventListener('DOMContentLoaded', async () => {
-        try {
-          console.log('🚀 Early Farcaster SDK initialization...')
-          await sdk.actions.ready()
-          console.log('✅ Early ready() call successful')
-          window.farcasterReady = true
-        } catch (error) {
-          console.error('❌ Early ready() failed:', error)
-        }
-      })
-    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
