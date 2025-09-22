@@ -19,7 +19,7 @@
   "tagline": "Turn eco-actions into rewards with AI-verified sustainability",
   "buttonTitle": "🌱 Start EcoHunt",
   "ogTitle": "EcoHunt - Earn $GREEN tokens for eco-friendly actions",
-  "ogDescription": "Join the gamified environmental revolution! Complete eco-friendly activities, get AI verification, and earn $GREEN tokens plus carbon NFTs on Zora Network.",
+  "ogDescription": "Join the gamified environmental revolution! Complete eco-friendly activities, get AI verification, and earn $GREEN tokens plus carbon NFTs on Base Network.",
   "ogImageUrl": "https://ecohunt-farcaster.vercel.app/social-image.svg",
   "castShareUrl": "https://ecohunt-farcaster.vercel.app/share",
   "webhookUrl": "https://ecohunt-farcaster.vercel.app/api/webhook"

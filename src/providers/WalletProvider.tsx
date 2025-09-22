@@ -5,29 +5,12 @@ import {
 } from '@rainbow-me/rainbowkit';
 import { WagmiProvider } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { defineChain } from 'viem';
-
-// Zora Network Configuration
-const zora = defineChain({
-  id: 7777777,
-  name: 'Zora',
-  nativeCurrency: {
-    decimals: 18,
-    name: 'ETH',
-    symbol: 'ETH',
-  },
-  rpcUrls: {
-    default: { http: ['https://rpc.zora.energy'] },
-  },
-  blockExplorers: {
-    default: { name: 'Zora Explorer', url: 'https://explorer.zora.energy' },
-  },
-});
+import { base } from 'viem/chains';
 
 const config = getDefaultConfig({
   appName: 'EcoHunt',
   projectId: 'ecohunt-farcaster-app',
-  chains: [zora],
+  chains: [base],
   ssr: false, // If your dApp uses server side rendering (SSR)
 });
 

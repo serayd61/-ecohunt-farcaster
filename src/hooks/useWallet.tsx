@@ -1,6 +1,6 @@
 import { createContext, useContext, type ReactNode, useState } from 'react'
 import { farcasterSDK } from '../utils/farcaster'
-import { ZORA_CHAINS } from '../config/wagmi'
+import { BASE_CHAINS } from '../config/wagmi'
 
 interface WalletContextType {
   address: string | undefined
@@ -64,9 +64,9 @@ export function WalletProvider({ children }: { children: ReactNode }) {
         if (provider) {
           await provider.request({
             method: 'wallet_switchEthereumChain',
-            params: [{ chainId: `0x${ZORA_CHAINS.mainnet.id.toString(16)}` }],
+            params: [{ chainId: `0x${BASE_CHAINS.mainnet.id.toString(16)}` }],
           })
-          setChainId(ZORA_CHAINS.mainnet.id)
+          setChainId(BASE_CHAINS.mainnet.id)
         }
       }
     } catch (err) {
@@ -81,9 +81,9 @@ export function WalletProvider({ children }: { children: ReactNode }) {
         if (provider) {
           await provider.request({
             method: 'wallet_switchEthereumChain',
-            params: [{ chainId: `0x${ZORA_CHAINS.testnet.id.toString(16)}` }],
+            params: [{ chainId: `0x${BASE_CHAINS.testnet.id.toString(16)}` }],
           })
-          setChainId(ZORA_CHAINS.testnet.id)
+          setChainId(BASE_CHAINS.testnet.id)
         }
       }
     } catch (err) {

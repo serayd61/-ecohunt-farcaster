@@ -159,12 +159,12 @@ export class BlockchainService {
 
 
   getExplorerUrl(txHash: string): string {
-    const config = this.isTestnet ? NETWORK_CONFIG.ZORA_TESTNET : NETWORK_CONFIG.ZORA_MAINNET
+    const config = this.isTestnet ? NETWORK_CONFIG.BASE_SEPOLIA : NETWORK_CONFIG.BASE_MAINNET
     return `${config.blockExplorer}/tx/${txHash}`
   }
 
   getNetworkConfig() {
-    return this.isTestnet ? NETWORK_CONFIG.ZORA_TESTNET : NETWORK_CONFIG.ZORA_MAINNET
+    return this.isTestnet ? NETWORK_CONFIG.BASE_SEPOLIA : NETWORK_CONFIG.BASE_MAINNET
   }
 }
 
