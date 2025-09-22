@@ -5,6 +5,22 @@
   "description": "Gamified environmental action platform where users earn $GREEN tokens and carbon offset NFTs by completing eco-friendly activities. Validate your eco-actions with AI-powered photo verification and contribute to a sustainable future.",
   "homeUrl": "https://ecohunt-farcaster.vercel.app",
   "iconUrl": "https://ecohunt-farcaster.vercel.app/icon.png",
-  "categories": ["gaming", "defi"],
-  "tags": ["green", "sustainability", "rewards", "nft", "carbon-offset", "environment", "eco", "climate"]
+  "imageUrl": "https://ecohunt-farcaster.vercel.app/preview.png",
+  "heroImageUrl": "https://ecohunt-farcaster.vercel.app/hero.png", 
+  "splashImageUrl": "https://ecohunt-farcaster.vercel.app/splash.png",
+  "splashBackgroundColor": "#10b981",
+  "primaryCategory": "defi",
+  "screenshotUrls": [
+    "https://ecohunt-farcaster.vercel.app/screenshot1.png",
+    "https://ecohunt-farcaster.vercel.app/screenshot2.png",
+    "https://ecohunt-farcaster.vercel.app/screenshot3.png"
+  ],
+  "tags": ["green", "sustainability", "rewards", "nft", "carbon-offset", "environment", "eco", "climate", "web3", "gamification"],
+  "tagline": "Turn eco-actions into rewards with AI-verified sustainability",
+  "buttonTitle": "🌱 Start EcoHunt",
+  "ogTitle": "EcoHunt - Earn $GREEN tokens for eco-friendly actions",
+  "ogDescription": "Join the gamified environmental revolution! Complete eco-friendly activities, get AI verification, and earn $GREEN tokens plus carbon NFTs on Zora Network.",
+  "ogImageUrl": "https://ecohunt-farcaster.vercel.app/og-image.png",
+  "castShareUrl": "https://ecohunt-farcaster.vercel.app/share",
+  "webhookUrl": "https://ecohunt-farcaster.vercel.app/api/webhook"
 }
