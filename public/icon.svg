@@ -1,0 +1,6 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="256" height="256" rx="40" fill="#10b981"/>
+<path d="M64 128C64 64 128 64 128 128M128 128C128 64 192 64 192 128M128 128C128 192 64 192 64 128M128 128C128 192 192 192 192 128" stroke="white" stroke-width="8" fill="none"/>
+<circle cx="128" cy="128" r="24" fill="white"/>
+<text x="128" y="140" font-family="Arial" font-size="20" fill="#10b981" text-anchor="middle">🌱</text>
+</svg>
