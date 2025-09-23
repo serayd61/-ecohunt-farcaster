@@ -1,8 +1,8 @@
 {
   "accountAssociation": {
-    "header": "eip155:1",
-    "payload": "0x5c0834E86c197b10d583940EC6366EFaA2e93B1e",
-    "signature": "0x"
+    "header": "eyJmaWQiOjAsInR5cGUiOiJjdXN0b2R5Iiwia2V5IjoiMHg1YzA4MzRFODZjMTk3YjEwZDU4Mzk0MEVDNTY2NkVGYUEyZTkzQjFlIn0",
+    "payload": "eyJkb21haW4iOiJlY29odW50LWZhcmNhc3Rlci52ZXJjZWwuYXBwIn0",
+    "signature": "0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
   },
   "miniapp": {
     "name": "EcoHunt",
