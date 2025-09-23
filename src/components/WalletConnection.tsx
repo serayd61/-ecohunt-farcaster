@@ -1,6 +1,6 @@
 import { Wallet, Link, AlertCircle, CheckCircle } from 'lucide-react'
 import { useWallet } from '../hooks/useWallet'
-import { ZORA_CHAINS } from '../config/wagmi'
+import { BASE_CHAINS } from '../config/wagmi'
 
 export function WalletConnection() {
   const {
@@ -15,8 +15,8 @@ export function WalletConnection() {
     error
   } = useWallet()
 
-  const isOnZora = chainId === ZORA_CHAINS.mainnet.id
-  const isOnZoraTestnet = chainId === ZORA_CHAINS.testnet.id
+  const isOnZora = chainId === BASE_CHAINS.mainnet.id
+  const isOnZoraTestnet = chainId === BASE_CHAINS.testnet.id
   const isOnSupportedNetwork = isOnZora || isOnZoraTestnet
 
   const formatAddress = (addr: string) => {
@@ -131,8 +131,8 @@ export function WalletConnection() {
         <div className="border-t pt-4">
           <h3 className="font-medium text-gray-900 mb-2">Supported Networks</h3>
           <ul className="text-sm text-gray-600 space-y-1">
-            <li>• Zora Mainnet (Chain ID: {ZORA_CHAINS.mainnet.id})</li>
-            <li>• Zora Testnet (Chain ID: {ZORA_CHAINS.testnet.id})</li>
+            <li>• Zora Mainnet (Chain ID: {BASE_CHAINS.mainnet.id})</li>
+            <li>• Zora Testnet (Chain ID: {BASE_CHAINS.testnet.id})</li>
           </ul>
         </div>
       </div>

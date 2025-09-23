@@ -1,16 +1,16 @@
 import { http, createConfig } from 'wagmi'
-import { zora, zoraTestnet } from 'wagmi/chains'
+import { base, baseSepolia } from 'wagmi/chains'
 
 export const wagmiConfig = createConfig({
-  chains: [zora, zoraTestnet],
+  chains: [base, baseSepolia],
   connectors: [],
   transports: {
-    [zora.id]: http(),
-    [zoraTestnet.id]: http(),
+    [base.id]: http(),
+    [baseSepolia.id]: http(),
   },
 })
 
-export const ZORA_CHAINS = {
-  mainnet: zora,
-  testnet: zoraTestnet,
+export const BASE_CHAINS = {
+  mainnet: base,
+  testnet: baseSepolia,
 } as const

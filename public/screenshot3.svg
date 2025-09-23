@@ -1,0 +1,24 @@
+<svg width="375" height="812" viewBox="0 0 375 812" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="375" height="812" fill="url(#cameraGradient)"/>
+<defs>
+<linearGradient id="cameraGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+<stop offset="0%" style="stop-color:#ecfdf5"/>
+<stop offset="100%" style="stop-color:#d1fae5"/>
+</linearGradient>
+</defs>
+<rect x="20" y="60" width="335" height="60" rx="30" fill="#10b981"/>
+<text x="187" y="100" font-family="Arial" font-size="24" font-weight="bold" fill="white" text-anchor="middle">Verify Action</text>
+<rect x="50" y="150" width="275" height="200" rx="20" fill="#065f46"/>
+<circle cx="187" cy="250" r="50" fill="white" opacity="0.9"/>
+<text x="187" y="270" font-family="Arial" font-size="40" text-anchor="middle">📸</text>
+<text x="187" y="380" font-family="Arial" font-size="18" font-weight="bold" fill="#065f46" text-anchor="middle">Take a photo to verify</text>
+<text x="187" y="405" font-family="Arial" font-size="14" fill="#047857" text-anchor="middle">AI will verify your eco-action</text>
+<rect x="20" y="450" width="160" height="60" rx="15" fill="white" opacity="0.9"/>
+<text x="100" y="480" font-family="Arial" font-size="14" font-weight="bold" fill="#10b981" text-anchor="middle">🚴 Bike Ride</text>
+<text x="100" y="495" font-family="Arial" font-size="12" fill="#047857" text-anchor="middle">Reward: +50 $GREEN</text>
+<rect x="195" y="450" width="160" height="60" rx="15" fill="white" opacity="0.9"/>
+<text x="275" y="480" font-family="Arial" font-size="14" font-weight="bold" fill="#10b981" text-anchor="middle">♻️ Recycle</text>
+<text x="275" y="495" font-family="Arial" font-size="12" fill="#047857" text-anchor="middle">Reward: +30 $GREEN</text>
+<rect x="100" y="540" width="175" height="50" rx="25" fill="#10b981"/>
+<text x="187" y="575" font-family="Arial" font-size="16" font-weight="bold" fill="white" text-anchor="middle">📷 Capture</text>
+</svg>

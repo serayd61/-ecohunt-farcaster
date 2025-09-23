@@ -1,0 +1,17 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1200" height="630" fill="url(#ogGradient)"/>
+<defs>
+<linearGradient id="ogGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+<stop offset="0%" style="stop-color:#10b981"/>
+<stop offset="50%" style="stop-color:#065f46"/>
+<stop offset="100%" style="stop-color:#047857"/>
+</linearGradient>
+</defs>
+<circle cx="200" cy="315" r="100" fill="white" opacity="0.9"/>
+<text x="200" y="350" font-family="Arial" font-size="80" text-anchor="middle">🌱</text>
+<text x="600" y="250" font-family="Arial" font-size="64" font-weight="bold" fill="white">EcoHunt</text>
+<text x="600" y="320" font-family="Arial" font-size="28" fill="white" opacity="0.9">Earn $GREEN tokens for eco-friendly actions</text>
+<text x="600" y="370" font-family="Arial" font-size="20" fill="white" opacity="0.8">AI-verified sustainability • Carbon NFTs • Gamified rewards</text>
+<rect x="600" y="420" width="280" height="60" rx="30" fill="white" opacity="0.9"/>
+<text x="740" y="460" font-family="Arial" font-size="20" font-weight="bold" fill="#10b981" text-anchor="middle">🚀 Join Revolution</text>
+</svg>
