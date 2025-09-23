@@ -1,0 +1,15 @@
+{
+  "accountAssociation": {
+    "header": "eip155:1",
+    "payload": "0x5c0834E86c197b10d583940EC6366EFaA2e93B1e",
+    "signature": "0x"
+  },
+  "miniapp": {
+    "name": "EcoHunt",
+    "icon": "icon.png",
+    "homeUrl": "https://ecohunt-farcaster.vercel.app/"
+  },
+  "baseBuilder": {
+    "allowedAddresses": ["0x5c0834E86c197b10d583940EC6366EFaA2e93B1e"]
+  }
+}
