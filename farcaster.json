@@ -7,7 +7,8 @@
   "miniapp": {
     "name": "EcoHunt",
     "icon": "icon.png",
-    "homeUrl": "https://ecohunt-farcaster.vercel.app/"
+    "homeUrl": "https://ecohunt-farcaster.vercel.app/",
+    "ogImageUrl": "https://ecohunt-farcaster.vercel.app/preview.png"
   },
   "baseBuilder": {
     "allowedAddresses": ["0x5c0834E86c197b10d583940EC6366EFaA2e93B1e"]
